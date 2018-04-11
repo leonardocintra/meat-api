@@ -9,6 +9,13 @@ server.use(restify.plugins.queryParser())
 
 server.get('/hello', [
   (req, resp, next) => {
+    if (req.userAgent() && req.userAgent().includes('MSIE 7.0')) {
+      let error: any = new Error()
+      error.statusCode = 400
+      error.message = 'Please, update your browser'
+      return next(error)
+    }
+    return next()
 
   }, (req, resp, next) => {
     resp.json({
