@@ -5,9 +5,14 @@ const server = restify.createServer({
     name: 'meat-api',
     version: '1.0.0'
 });
+server.use(restify.plugins.queryParser());
 server.get('/hello', (req, resp, next) => {
     resp.json({
-        message: 'Ola, deu certo!'
+        browser: req.userAgent(),
+        method: req.method,
+        url: req.href(),
+        path: req.path,
+        query: req.query
     });
     return next();
 });
