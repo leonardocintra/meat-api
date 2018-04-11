@@ -10,6 +10,16 @@ class UserRouter extends router_1.Router {
                 return next();
             });
         });
+        application.get('/users/:id', (req, resp, next) => {
+            user_model_1.User.findById(req.params.id).then(user => {
+                if (user) {
+                    resp.json(user);
+                    return next();
+                }
+                resp.send(404);
+                return next();
+            });
+        });
     }
 }
 exports.userRouter = new UserRouter();
