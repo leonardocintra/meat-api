@@ -11,6 +11,14 @@ export class Server {
 
   initializeDb()  {
     (<any>mongoose).Promise = global.Promise
+        
+    mongoose.connection.on('error', function(error) {
+      console.error('Database connection error:', error);
+    });
+    
+    mongoose.connection.once('open', function() {
+      console.log('Database connected');
+    });
     return mongoose.connect(environment.db.url)
   }
 

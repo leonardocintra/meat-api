@@ -6,6 +6,12 @@ const environment_1 = require("../common/environment");
 class Server {
     initializeDb() {
         mongoose.Promise = global.Promise;
+        mongoose.connection.on('error', function (error) {
+            console.error('Database connection error:', error);
+        });
+        mongoose.connection.once('open', function () {
+            console.log('Database connected');
+        });
         return mongoose.connect(environment_1.environment.db.url);
     }
     initRoutes(routers) {
