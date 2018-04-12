@@ -4,13 +4,16 @@ import { User } from "./user-model";
 
 class UserRouter extends Router {
   applyRoutes(application: restify.Server) {
+    
+    // GET - /User
     application.get('/users', (req, resp, next) => {
-      User.findAll().then(users => {
+      User.find().then(users => {
         resp.json(users)
         return next()
       })
     })
 
+    // GET - /User/1
     application.get('/users/:id', (req, resp, next) => {
       User.findById(req.params.id).then(user => {
         if(user) {
