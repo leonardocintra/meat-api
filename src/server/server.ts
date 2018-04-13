@@ -9,9 +9,9 @@ export class Server {
 
   application: restify.Server
 
-  initializeDb()  {
+  initializeDb() {
     (<any>mongoose).Promise = global.Promise
-        
+
     mongoose.connection.on('error', function(error) {
       console.error('Database connection error:', error);
     });
