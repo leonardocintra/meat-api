@@ -6,7 +6,9 @@ API Restaurante
 ## Development
 
 Dica: abre dois terminais
+
 Term1: `tsc -w`
+
 Term2: `nodemon`
 
 ## Meta
