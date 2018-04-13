@@ -56,9 +56,27 @@ class UserRouter extends Router {
             return next()
           }
         ).catch(
-          
         )
     })
+
+    // PATH - /Users/1
+    application.patch('/users/:id', (req, resp, next) => {
+      const options = { new: true}
+      User.findOneAndUpdate(req.params.id, req.body, options)
+        .then(
+          user => {
+            if(user) {
+              resp.json(user)
+              return next()
+            }
+
+            resp.send(404)
+            return next()
+          }
+        )
+    })
+
+    // DELETE - /Users/1
   }
 }
 
