@@ -5,6 +5,11 @@ API Restaurante
 
 ## Development
 
+```
+git clone https://github.com/leonardocintra/meat-api
+npm install
+```
+
 Dica: abre dois terminais
 
 Term1: `tsc -w`
