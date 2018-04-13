@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     password: {
-        type: String
+        type: String,
+        select: false
     }
 });
 exports.User = mongoose.model('User', userSchema);
