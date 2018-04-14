@@ -3,6 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const router_1 = require("../common/router");
 const user_model_1 = require("./user-model");
 class UserRouter extends router_1.Router {
+    /* // Nao precisei user esse constructor pois no moodel o select esta = false
+   constructor() {
+     super()
+     this.on('beforeRender', document => {
+       document.password = undefined
+     })
+   }
+   */
     applyRoutes(application) {
         // GET - /Users
         application.get('/users', (req, resp, next) => {

@@ -3,6 +3,16 @@ import { Router } from "../common/router";
 import { User } from "./user-model";
 
 class UserRouter extends Router {
+
+  /* // Nao precisei user esse constructor pois no moodel o select esta = false
+ constructor() {
+   super()
+   this.on('beforeRender', document => {
+     document.password = undefined
+   })
+ }
+ */
+
   applyRoutes(application: restify.Server) {
     
     // GET - /Users
