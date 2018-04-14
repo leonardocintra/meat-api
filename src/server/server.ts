@@ -10,7 +10,7 @@ export class Server {
 
   application: restify.Server
 
-  initializeDb() {
+  initializeDb(): Promise<mongoose.Mongoose> {
     (<any>mongoose).Promise = global.Promise
 
     var options = {
