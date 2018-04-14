@@ -7,32 +7,21 @@ class UserRouter extends Router {
     
     // GET - /Users
     application.get('/users', (req, resp, next) => {
-      User.find().then(users => {
-        resp.json(users)
-        return next()
-      })
+      User.find()
+        .then(this.render(resp, next))
     })
 
     // GET - /Users/1
     application.get('/users/:id', (req, resp, next) => {
-      User.findById(req.params.id).then(user => {
-        if(user) {
-          resp.json(user)
-          return next()
-        }
-
-        resp.send(404)
-        return next()
-      })
+      User.findById(req.params.id)
+        .then(this.render(resp, next))
     })
 
     // POST /Users
     application.post('/users', (req, resp, next) => {
       let user = new User(req.body)
-      user.save().then(user => {
-        resp.json(user)
-        return next()
-      })
+      user.save()
+        .then(this.render(resp, next))
     })
 
     // PUT - /Users/1
@@ -50,12 +39,9 @@ class UserRouter extends Router {
               resp.send(404)
             }
           }
-        ).then(
-          user => {
-            resp.json(user)
-            return next()
-          }
-        ).catch(
+        )
+        .then(this.render(resp, next))
+        .catch(
         )
     })
 
@@ -63,17 +49,7 @@ class UserRouter extends Router {
     application.patch('/users/:id', (req, resp, next) => {
       const options = { new: true}
       User.findOneAndUpdate(req.params.id, req.body, options)
-        .then(
-          user => {
-            if(user) {
-              resp.json(user)
-              return next()
-            }
-
-            resp.send(404)
-            return next()
-          }
-        )
+        .then(this.render(resp, next))
     })
 
     // DELETE - /Users/1
