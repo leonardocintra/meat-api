@@ -1,17 +1,9 @@
 import * as restify from 'restify'
 import { Router } from "../common/router";
 import { User } from "./user-model";
+import { NotFoundError } from 'restify-errors';
 
 class UserRouter extends Router {
-
-  /* // Nao precisei user esse constructor pois no moodel o select esta = false
- constructor() {
-   super()
-   this.on('beforeRender', document => {
-     document.password = undefined
-   })
- }
- */
 
   applyRoutes(application: restify.Server) {
     
@@ -19,12 +11,14 @@ class UserRouter extends Router {
     application.get('/users', (req, resp, next) => {
       User.find()
         .then(this.render(resp, next))
+        .catch(next)
     })
 
     // GET - /Users/1
     application.get('/users/:id', (req, resp, next) => {
       User.findById(req.params.id)
         .then(this.render(resp, next))
+        .catch(next)
     })
 
     // POST /Users
@@ -32,6 +26,7 @@ class UserRouter extends Router {
       let user = new User(req.body)
       user.save()
         .then(this.render(resp, next))
+        .catch(next)
     })
 
     // PUT - /Users/1
@@ -46,32 +41,35 @@ class UserRouter extends Router {
             if(result.n) {
               return User.findById(req.params.id)
             } else {
-              resp.send(404)
+              throw new NotFoundError('Documento não encontrado. ')
             }
           }
         )
         .then(this.render(resp, next))
-        .catch(
-        )
+        .catch(next)
     })
 
     // PATH - /Users/1
     application.patch('/users/:id', (req, resp, next) => {
-      const options = { new: true}
+      const options = { new: true }
       User.findOneAndUpdate(req.params.id, req.body, options)
         .then(this.render(resp, next))
+        .catch(next)
     })
 
     // DELETE - /Users/1
     application.del('/users/:id', (req, resp, next) => {
-      User.remove({_id:req.params.id}).exec().then((cmdResult: any) => {
-        if(cmdResult.n){
-          resp.send(204)          
-        } else {
-          resp.send(404)
-        }
-        return next()
-      })
+      User.remove({_id:req.params.id})
+        .exec()
+        .then((cmdResult: any) => {
+          if(cmdResult.n){
+            resp.send(204)          
+          } else {
+            throw new NotFoundError('Documento não encontrado.')
+          }
+          return next()
+        })
+        .catch(next)
     })
   }
 }
