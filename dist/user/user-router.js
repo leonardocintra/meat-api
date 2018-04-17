@@ -45,7 +45,7 @@ class UserRouter extends router_1.Router {
         // PATH - /Users/1
         application.patch('/users/:id', (req, resp, next) => {
             const options = { new: true };
-            user_model_1.User.findOneAndUpdate(req.params.id, req.body, options)
+            user_model_1.User.findByIdAndUpdate(req.params.id, req.body, options)
                 .then(this.render(resp, next))
                 .catch(next);
         });
