@@ -1,7 +1,10 @@
 import { validateCPF } from './../common/validators';
 import * as mongoose from 'mongoose'
+import * as bcrypt from 'bcrypt'
+import { environment } from '../common/environment';
 
-export interface UserInterface extends mongoose.Document {
+
+export interface User extends mongoose.Document {
   name: string,
   email: string,
   password: string
@@ -40,4 +43,19 @@ const userSchema = new mongoose.Schema({
   }
 })
 
-export const User = mongoose.model<UserInterface>('User', userSchema)
+userSchema.pre('save', function(next) {
+  const user: User = this
+  if (!user.isModified('password')) {
+    next()
+  } else {
+    bcrypt
+      .hash(user.password, environment.security.saltRounds)
+      .then(hash => {
+        user.password = hash
+        next()
+      })
+      .catch(next)
+  }
+})
+
+export const User = mongoose.model<User>('User', userSchema)
