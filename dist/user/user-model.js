@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        select: false
+        select: true
     },
     gender: {
         type: String,
@@ -36,19 +36,33 @@ const userSchema = new mongoose.Schema({
         }
     }
 });
-userSchema.pre('save', function (next) {
+const hashPassword = (obj, next) => {
+    bcrypt
+        .hash(obj.password, environment_1.environment.security.saltRounds)
+        .then(hash => {
+        obj.password = hash;
+        next();
+    })
+        .catch(next);
+};
+const saveMiddleware = function (next) {
     const user = this;
     if (!user.isModified('password')) {
         next();
     }
     else {
-        bcrypt
-            .hash(user.password, environment_1.environment.security.saltRounds)
-            .then(hash => {
-            user.password = hash;
-            next();
-        })
-            .catch(next);
+        hashPassword(user, next);
     }
-});
+};
+const updateMiddleware = function (next) {
+    if (!this.getUpdate().password) {
+        next();
+    }
+    else {
+        hashPassword(this.getUpdate(), next);
+    }
+};
+userSchema.pre('save', saveMiddleware);
+userSchema.pre('findOneAndUpdate', updateMiddleware);
+userSchema.pre('update', updateMiddleware);
 exports.User = mongoose.model('User', userSchema);
