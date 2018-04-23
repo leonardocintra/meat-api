@@ -1,14 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const router_1 = require("./router");
+const mongoose = require("mongoose");
 const restify_errors_1 = require("restify-errors");
 class ModelRouter extends router_1.Router {
     constructor(model) {
         super();
         this.model = model;
+        this.validateId = (req, resp, next) => {
+            if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+                next(new restify_errors_1.NotFoundError('Document not found'));
+            }
+            else {
+                next();
+            }
+        };
         this.findAll = (req, resp, next) => {
             this.model.find()
-                .then(this.render(resp, next))
+                .then(this.renderAll(resp, next))
                 .catch(next);
         };
         this.findById = (req, resp, next) => {
