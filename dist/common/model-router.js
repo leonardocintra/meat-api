@@ -21,7 +21,7 @@ class ModelRouter extends router_1.Router {
                 .catch(next);
         };
         this.findById = (req, resp, next) => {
-            this.model.findById(req.params.id)
+            this.prepareOne(this.model.findById(req.params.id))
                 .then(this.render(resp, next))
                 .catch(next);
         };
@@ -40,7 +40,7 @@ class ModelRouter extends router_1.Router {
                 .exec()
                 .then(result => {
                 if (result.n) {
-                    return this.model.findById(req.params.id);
+                    return this.prepareOne(this.model.findById(req.params.id));
                 }
                 else {
                     throw new restify_errors_1.NotFoundError('Documento não encontrado. ');
@@ -72,6 +72,9 @@ class ModelRouter extends router_1.Router {
             })
                 .catch(next);
         };
+    }
+    prepareOne(query) {
+        return query;
     }
 }
 exports.ModelRouter = ModelRouter;
