@@ -12,9 +12,8 @@ class UserRouter extends ModelRouter<User> {
   findByEmail = (req, resp, next) => {
     if (req.query.email) {
       // exemplo de como controlar a versao
-      User.find({
-        email: req.query.email
-      })
+      User.findByEmail(req.query.email)
+      .then(user => [user])
       .then(this.renderAll(resp, next))
       .catch(next)
     } else {
@@ -29,7 +28,7 @@ class UserRouter extends ModelRouter<User> {
     //   { version: '2.0.0', handler: [this.findByEmail, this.findAll] }
     // ]));
 
-    application.get('/users', this.findAll)    
+    application.get('/users', [this.findByEmail, this.findAll])    
     application.get('/users/:id', [this.validateId, this.findById])
     application.post('/users', this.save)
     application.put('/users/:id', [this.validateId, this.replace])
