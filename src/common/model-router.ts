@@ -9,9 +9,8 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
   }
 
   protected prepareOne(query: mongoose.DocumentQuery<D, D>) : mongoose.DocumentQuery<D, D> {
-    
-    return query
-  } 
+  return query
+  }
 
   validateId = (req, resp, next) => {
     if(!mongoose.Types.ObjectId.isValid(req.params.id)) {

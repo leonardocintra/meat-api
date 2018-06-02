@@ -4,7 +4,7 @@
   "description": "API de Restaurante",
   "main": "dist/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,12 @@
     "@types/bcrypt": "1.0.0",
     "@types/mongoose": "^5.0.9",
     "@types/restify": "^5.0.9",
-    "@types/restify-errors": "^4.3.2"
+    "@types/restify-errors": "^4.3.2",
+    "standard": "^11.0.1"
+  },
+  "standard": {
+    "ignore": [
+      "/dist"
+    ]
   }
 }
