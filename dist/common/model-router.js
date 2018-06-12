@@ -72,12 +72,14 @@ class ModelRouter extends router_1.Router {
             })
                 .catch(next);
         };
+        this.basePath = `/${model.collection.name}`;
     }
     prepareOne(query) {
         return query;
     }
     envelope(document) {
         let resoruce = Object.assign({ _links: {} }, document.toJSON());
+        resoruce._links.self = `${this.basePath}/${resoruce._id}`;
         return resoruce;
     }
 }

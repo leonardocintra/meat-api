@@ -4,8 +4,11 @@ import { NotFoundError } from "restify-errors";
 
 export abstract class ModelRouter<D extends mongoose.Document> extends Router {
   
+  basePath: string
+
   constructor(protected model: mongoose.Model<D>) {
     super()
+    this.basePath = `/${model.collection.name}`
   }
 
   protected prepareOne(query: mongoose.DocumentQuery<D, D>) : mongoose.DocumentQuery<D, D> {
@@ -14,6 +17,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
 
   envelope(document: any): any {
     let resoruce = Object.assign({_links:{}}, document.toJSON())
+    resoruce._links.self = `${this.basePath}/${resoruce._id}`
     return resoruce
   }
 
