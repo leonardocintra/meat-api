@@ -7,6 +7,7 @@ class ModelRouter extends router_1.Router {
     constructor(model) {
         super();
         this.model = model;
+        this.pageSize = 4;
         this.validateId = (req, resp, next) => {
             if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
                 next(new restify_errors_1.NotFoundError('Document not found'));
@@ -16,7 +17,12 @@ class ModelRouter extends router_1.Router {
             }
         };
         this.findAll = (req, resp, next) => {
+            let page = parseInt(req.query._page || 1);
+            page = page > 0 ? page : 1;
+            const skip = (page - 1) * this.pageSize;
             this.model.find()
+                .skip(skip)
+                .limit(this.pageSize)
                 .then(this.renderAll(resp, next))
                 .catch(next);
         };
