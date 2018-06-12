@@ -12,6 +12,11 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     return query
   }
 
+  envelope(document: any): any {
+    let resoruce = Object.assign({_links:{}}, document.toJSON())
+    return resoruce
+  }
+
   validateId = (req, resp, next) => {
     if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
       next(new NotFoundError('Document not found'))
