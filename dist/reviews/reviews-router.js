@@ -6,6 +6,12 @@ class ReviewsRouter extends model_router_1.ModelRouter {
     constructor() {
         super(reviews_model_1.Review);
     }
+    envelope(document) {
+        let resource = super.envelope(document);
+        const restId = document.restaurant._id ? document.restaurant._id : document.restaurant;
+        resource._links.restaurant = `/restaurants/${restId}`;
+        return resource;
+    }
     prepareOne(query) {
         return query.populate('user', 'name').populate('restaurant', 'name');
     }

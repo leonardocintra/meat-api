@@ -8,6 +8,13 @@ class ReviewsRouter extends ModelRouter<Review> {
     super(Review)
   }
 
+  envelope(document: any): any {
+    let resource = super.envelope(document)
+    const restId = document.restaurant._id ? document.restaurant._id : document.restaurant
+    resource._links.restaurant = `/restaurants/${restId}`
+    return resource
+  }
+
   protected prepareOne(query: mongoose.DocumentQuery<Review, Review>) : mongoose.DocumentQuery<Review, Review> {
     return query.populate('user', 'name').populate('restaurant', 'name')
   }
