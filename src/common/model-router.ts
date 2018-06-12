@@ -1,6 +1,7 @@
 import { Router } from "./router"
 import * as mongoose from 'mongoose'
 import { NotFoundError } from "restify-errors";
+import { resolveSoa } from "dns";
 
 export abstract class ModelRouter<D extends mongoose.Document> extends Router {
   
@@ -22,6 +23,28 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     return resoruce
   }
 
+  envelopeAll(documents: any[], options: any = {}): any {
+    const resoruce: any = {
+      _links: {
+        self: `${options.url}`
+      },
+      items: documents
+    }
+
+    if (options.page && options.count && options.pageSize) {
+      if (options.page > 1) {
+        resoruce._links.previous = `${this.basePath}?_page=${options.page - 1}`
+      }
+      
+      const remaining = options.count - (options.page * options.pageSize)
+      if (remaining > 0) {
+        resoruce._links.next = `${this.basePath}?_page=${options.page + 1}`
+      }
+    }
+
+    return resoruce
+  }
+
   validateId = (req, resp, next) => {
     if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
       next(new NotFoundError('Document not found'))
@@ -36,10 +59,15 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
 
     const skip = (page - 1) * this.pageSize
 
-    this.model.find()
-      .skip(skip)
-      .limit(this.pageSize)
-      .then(this.renderAll(resp, next))
+    this.model.count({})
+      .exec()
+      .then(count => this.model.find()
+        .skip(skip)
+        .limit(this.pageSize)
+        .then(this.renderAll(resp, next, { 
+          page, count, pageSize: this.pageSize, url: req.url 
+        }))
+      )
       .catch(next)
   }
 

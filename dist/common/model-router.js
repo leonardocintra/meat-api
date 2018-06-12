@@ -20,10 +20,14 @@ class ModelRouter extends router_1.Router {
             let page = parseInt(req.query._page || 1);
             page = page > 0 ? page : 1;
             const skip = (page - 1) * this.pageSize;
-            this.model.find()
+            this.model.count({})
+                .exec()
+                .then(count => this.model.find()
                 .skip(skip)
                 .limit(this.pageSize)
-                .then(this.renderAll(resp, next))
+                .then(this.renderAll(resp, next, {
+                page, count, pageSize: this.pageSize, url: req.url
+            })))
                 .catch(next);
         };
         this.findById = (req, resp, next) => {
@@ -86,6 +90,24 @@ class ModelRouter extends router_1.Router {
     envelope(document) {
         let resoruce = Object.assign({ _links: {} }, document.toJSON());
         resoruce._links.self = `${this.basePath}/${resoruce._id}`;
+        return resoruce;
+    }
+    envelopeAll(documents, options = {}) {
+        const resoruce = {
+            _links: {
+                self: `${options.url}`
+            },
+            items: documents
+        };
+        if (options.page && options.count && options.pageSize) {
+            if (options.page > 1) {
+                resoruce._links.previous = `${this.basePath}?_page=${options.page - 1}`;
+            }
+            const remaining = options.count - (options.page * options.pageSize);
+            if (remaining > 0) {
+                resoruce._links.next = `${this.basePath}?_page=${options.page + 1}`;
+            }
+        }
         return resoruce;
     }
 }
