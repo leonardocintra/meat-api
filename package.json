@@ -38,6 +38,9 @@
     "typescript": "^2.9.1"
   },
   "jest": {
+    "globals": {
+      "address": "http://localhost:3001"
+    },
     "testEnvironment": "node",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

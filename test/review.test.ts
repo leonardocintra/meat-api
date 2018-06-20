@@ -1,7 +1,7 @@
 import 'jest'
 import * as request from 'supertest'
 
-let address: string = `http://localhost:3001`
+let address: string = (<any>global).address
 
 test('retornar status HTTP 200 (GET) ao buscar todos os reviews', () => {
   return request(address)
