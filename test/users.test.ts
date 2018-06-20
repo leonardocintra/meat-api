@@ -1,24 +1,8 @@
 import 'jest'
 import * as request from 'supertest'
-import { Server } from '../src/server/server'
-import { environment } from '../src/common/environment'
-import { userRouter } from '../src/user/user-router'
-import { User } from '../src/user/user-model'
 
-let address: string
-let server: Server
+let address: string = `http://localhost:3001`
 
-beforeAll(() => {
-  environment.db.url = process.env.DB_URL || 'mongodb://githubtest:loja200test@ds018268.mlab.com:18268/meatdb-test'
-  environment.server.port = process.env.SERVER_PORT || 3001
-  
-  address = `http://localhost:${environment.server.port}`
-  server = new Server()
-  return server
-    .bootstrap([userRouter])
-    .then(() => User.remove({}).exec())
-    .catch(console.error)
-})
 
 test('retornar status HTTP 200 (GET) para buscar todos os usuarios', () => {
   return request(address)
@@ -97,8 +81,4 @@ test('retornar status HTTP 200 (PATCH) ao atualizar dados de um usuario', () => 
       expect(response.body.email).toBe('usuario3@gmail.com')
     })
     .catch(fail)
-})
-
-afterAll(() => {
-  return server.shutdown()
 })
