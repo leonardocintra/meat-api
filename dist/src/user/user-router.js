@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const auth_handler_1 = require("./../security/auth-handler");
 const restify = require("restify");
 const user_model_1 = require("./user-model");
 const model_router_1 = require("../common/model-router");
@@ -32,6 +33,7 @@ class UserRouter extends model_router_1.ModelRouter {
         application.put(`${this.basePath}/:id`, [this.validateId, this.replace]);
         application.patch(`${this.basePath}/:id`, [this.validateId, this.update]);
         application.del(`${this.basePath}/:id`, [this.validateId, this.delete]);
+        application.post(`${this.basePath}/authenticate`, auth_handler_1.authenticate);
     }
 }
 exports.userRouter = new UserRouter();
