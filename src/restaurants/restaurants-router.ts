@@ -1,4 +1,3 @@
-import { mergePatchBodyParser } from './../server/merge-patch-parser';
 import { Restaurant } from './restaurants-model'
 import * as restify from 'restify'
 import { NotFoundError } from 'restify-errors'

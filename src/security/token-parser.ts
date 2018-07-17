@@ -1,4 +1,4 @@
-import { environment } from './../common/environment';
+import { environment } from '../common/environment';
 import * as restify from 'restify'
 import * as jwt from 'jsonwebtoken'
 import { User } from '../user/user-model';

@@ -1,10 +1,10 @@
+import { tokenParser } from './../security/token-parser';
 import * as restify from 'restify';
 import * as mongoose from 'mongoose'
 import { environment } from '../common/environment'
 import { Router } from '../common/router'
 import { mergePatchBodyParser } from './merge-patch-parser';
 import { handleError } from './error-handler';
-import { tokenParser } from '../security/auth-parser';
 
 
 export class Server {

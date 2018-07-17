@@ -1,8 +1,8 @@
-import { environment } from './../common/environment';
+import { environment } from '../common/environment';
 import * as restify from 'restify'
 import * as jwt from 'jsonwebtoken';
 import { NotAuthorizedError } from 'restify-errors';
-import { User } from './../user/user-model';
+import { User } from '../user/user-model';
 
 export const authenticate: restify.RequestHandler = (req, resp, next) => {
   const { email, password } = req.body
