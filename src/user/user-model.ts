@@ -12,7 +12,7 @@ export interface User extends mongoose.Document {
   gender: string,
   profiles: string[],
   matches(password: string): boolean,
-  hasAny(profiles: string[]): boolean
+  hasAny(...profiles: string[]): boolean
 }
 
 export interface UserModel extends mongoose.Model<User> {
