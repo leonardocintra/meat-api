@@ -20,7 +20,7 @@
   "dependencies": {
     "bcrypt": "1.0.3",
     "jsonwebtoken": "^8.3.0",
-    "mongoose": "^5.0.14",
+    "mongoose": "^5.7.5",
     "restify": "^7.2.0",
     "restify-errors": "^6.0.0"
   },
